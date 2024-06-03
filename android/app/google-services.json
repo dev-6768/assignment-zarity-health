@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1052812706021",
+    "project_id": "quizapp-956f3",
+    "storage_bucket": "quizapp-956f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052812706021:android:ac9e1e3b1638eb5b41d40c",
+        "android_client_info": {
+          "package_name": "com.example.assignment_zarity_health"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052812706021-u30l6amqm53is5qr87chieuu9c6uormg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVv00AB0MF6aDC_XJaito_lTkj6LRXN1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052812706021-u30l6amqm53is5qr87chieuu9c6uormg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
