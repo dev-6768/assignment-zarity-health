@@ -5,6 +5,7 @@ import 'package:assignment_zarity_health/services/blog_fetching.dart';
 import 'package:assignment_zarity_health/utils/constants.dart';
 import 'package:assignment_zarity_health/widgets/appbar_widget.dart';
 import 'package:assignment_zarity_health/widgets/drawer_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
 
@@ -65,6 +66,11 @@ class _BlogPageState extends State<BlogPage> {
     }); 
   }
 
+  Future<List<ListItemForBlog>> getBlogData() async {
+    dynamic fetchList = await GetBlog.getBlogData();
+    return fetchList;
+  }
+
 
 
   @override
@@ -80,48 +86,36 @@ class _BlogPageState extends State<BlogPage> {
         child: const Icon(Icons.add),
       ),
 
-      body: FutureBuilder(
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
- 
-              } else if (snapshot.hasData) {
-                final data = snapshot.data as List<ListItemForBlog>;
-                return Expanded(
-                    child: ListView.builder(
-                    controller: scrollerController,
-                    itemCount: data.length,
-                    itemBuilder: ((context, index) {
-                      return SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: ListViewItemForBlog.listItemWidget(
-                          image: data[index].image,
-                          title: data[index].title,
-                          summary: data[index].summary,
-                          index: data[index].index,
-                          context: context,
-                          brightness: Theme.of(context).brightness,
-                        )
-                    );
-                    })
-                  ),
-                );
-              }
-            }
- 
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
- 
-          future: GetBlog.getBlogData(),
-        ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('/blogs').orderBy("index").snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Something went wrong'));
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          final data = snapshot.requireData;
+
+          return ListView.builder(
+            controller: scrollerController,
+            itemCount: data.size,
+            itemBuilder: (context, index) {
+              var blog = data.docs[index];
+              return ListViewItemForBlog.listItemWidget(
+                image: blog["image"],
+                title: blog["title"],
+                summary: blog["summary"],
+                index: blog["index"],
+                context: context,
+                brightness: Theme.of(context).brightness,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
