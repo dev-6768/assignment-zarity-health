@@ -66,13 +66,6 @@ class _BlogPageState extends State<BlogPage> {
     }); 
   }
 
-  Future<List<ListItemForBlog>> getBlogData() async {
-    dynamic fetchList = await GetBlog.getBlogData();
-    return fetchList;
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
